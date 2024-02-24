@@ -46,7 +46,8 @@ def save_results(results, output_folder):
 
 def main():
     # Define paths and parameters
-    dataset_folder = os.path.join('in',
+    dataset_folder = os.path.join('..',
+                                  'in',
                                   'jpg')
     
     user_input = input('Enter the 4 digit code of your target image: ')
@@ -55,7 +56,8 @@ def main():
 
     target_image_path = os.path.join(dataset_folder, target_image)
     
-    output_folder = 'out'
+    output_folder = os.path.join('..',
+                                'out')
 
     # Find similar images
     results = find_similar_images(target_image_path, dataset_folder)
