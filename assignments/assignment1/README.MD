@@ -31,6 +31,8 @@ python src/assignment1.py
 ```
 
 ## The Code
+The script starts off by prompting you for a 4 digit code for the target image you want to find similar images for. Simply find an image in the ```jpg``` you want to search for. For example, ```image_0249.jpg``` would just require you to input ```0249``` in the terminal.
+
 The script works by simply looping through every ```.jpg``` file in the ```jpg``` folder. For each file, we load it as an openCV image, create an RGB histogram for it, and then normalize the histogram afterwards.
 
 When the normalized histogram has been made, we compare each one with the target images histogram using the ```HISTCOMP_CHISQR``` method. After comparing, we add the images name and its distance (rounded to 2 decimal points) to a tuple, and append that tuple to a results list.
