@@ -5,7 +5,6 @@ from tqdm import tqdm
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
-
 # pip install opencv-python pandas tqdm
 
 # Get the directory where the script is located
@@ -34,9 +33,12 @@ def find_similar_images(target_image_path, dataset_folder, similar_images=5):
 
 def calculate_histogram(image_path):
     """Load an image & Calculate its color histogram."""
+    #loading the image with opencv
     image = cv2.imread(image_path)
+    #creating a historgram of the images RGB channels
     hist = cv2.calcHist([image], [0, 1, 2], None, [256, 256, 256], [0, 256, 0, 256, 0, 256])
-    normalized_hist = cv2.normalize(hist, hist, 0, 1.0, cv2.NORM_MINMAX)
+    #normalizing the histogram
+    normalized_hist = cv2.normalize(hist, None, 0, 1.0, cv2.NORM_MINMAX)
     return normalized_hist
 
 def compare_histograms(hist1, hist2):
@@ -87,6 +89,7 @@ def main():
     # Find similar images
     results = find_similar_images(target_image_path, dataset_folder)
 
+    #plot and show the images found
     plot_images(results)
 
     # Save results
