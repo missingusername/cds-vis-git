@@ -1,3 +1,7 @@
+
+
+#REMEMBER TO ADD A SECOND SCRIPT THAT UTILIZES NEAREST NEIGHBOR (NOTEBOOK 10)
+
 import os
 import cv2
 import pandas as pd

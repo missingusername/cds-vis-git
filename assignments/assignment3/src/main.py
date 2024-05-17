@@ -90,7 +90,6 @@ def build_model():
     """
     base_model = VGG16(include_top=False,
                        pooling='avg',
-                       weights='imagenet', #using imagenet weights because i heard its good?
                        input_shape=(224, 224, 3))
     for layer in base_model.layers:
         layer.trainable = False
@@ -154,9 +153,6 @@ def plot_learning_curves(history):
 
     Args:
         history (History): Keras History object containing training history.
-
-    Returns:
-        None
     """
     plt.plot(history.history['accuracy'], label='train_accuracy')
     plt.plot(history.history['val_accuracy'], label='val_accuracy')
