@@ -2,23 +2,12 @@ import os
 import argparse
 import pandas as pd
 import cv2
-from facenet_pytorch import MTCNN, InceptionResnetV1
+from facenet_pytorch import MTCNN
 import torch
-from PIL import Image
 from tqdm import tqdm
 import time
 
 def resize_image(image, scale):
-    """
-    Resizes the given image by the specified scale.
-
-    Parameters:
-    - image: The input image to be resized (numpy array).
-    - scale: The scale factor to resize the image by (float).
-
-    Returns:
-    - resized_image: The resized image (PIL Image).
-    """
     height, width = image.shape[:2]
     new_width = int(width * scale)
     new_height = int(height * scale)
@@ -58,10 +47,10 @@ def process_folder(folder_path, scale):
     for root, dirs, files in os.walk(folder_path):
         for filename in tqdm(files, position=0, leave=True):
             if filename.endswith(('.jpg', '.jpeg', '.png', '.bmp', '.gif', '.tiff')):
-                print(f'processing {filename}')
+                #print(f'processing {filename}')
                 image_path = os.path.join(root, filename)
                 decade, num_faces = process_image(image_path, scale)
-                print(f'Decade: {decade}\nFaces found: {num_faces}\n')
+                #print(f'Decade: {decade}\nFaces found: {num_faces}\n')
                 
                 if decade is not None:
                     if decade not in data['Decade']:
@@ -92,31 +81,34 @@ script_directory = os.path.dirname(os.path.realpath(__file__))
 # Change the current working directory to the directory of the script
 os.chdir(script_directory)
 
-gdl_path = os.path.join('..','in','GDL')
+data_path = os.path.join('..','in')
 
-# Initialize MTCNN for face detection
+# global Initialization of MTCNN for face detection
 mtcnn = MTCNN(keep_all=True) 
 
 def main():
+        
     parser = argparse.ArgumentParser(description='Process images in a folder and compute statistics per decade.')
-    #parser.add_argument('folder_path', type=str, help='Path to the folder containing images')
     parser.add_argument('-s', '--scale', required=False, type=float, default=1, help='Scale factor to resize the images (default: 0.5)')
     
     args = parser.parse_args()
-    #folder_path = args.folder_path
     scale = args.scale
 
     start_time = time.time()  # Start the timer
     
-    df = process_folder(gdl_path, scale)
+    for folder in os.listdir(data_path):
+        current_folder_path = os.path.join(data_path, folder)
+        
+        start_time = time.time()  # Start the timer
+        
+        print(f'Processing "{folder}" folder')
+        df = process_folder(current_folder_path, scale)
     
-    end_time = time.time()  # End the timer
-    elapsed_time = end_time - start_time  # Calculate the elapsed time
+        end_time = time.time()  # End the timer
+        elapsed_time = end_time - start_time  # Calculate the elapsed time
+        print(f'Time elapsed: {elapsed_time} seconds')
 
-    print(df)
-    print(f'Time elapsed: {elapsed_time} seconds')
-
-    df.to_csv('../out/testrun.csv')
+        df.to_csv(f'../out/{folder} stats.csv')
 
 if __name__ == '__main__':
     main()
