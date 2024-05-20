@@ -3,9 +3,18 @@ import argparse
 import pandas as pd
 import cv2
 from facenet_pytorch import MTCNN
-import torch
 from tqdm import tqdm
 import time
+
+# Get the directory where the script is located
+script_directory = os.path.dirname(os.path.realpath(__file__))
+# Change the current working directory to the directory of the script
+os.chdir(script_directory)
+
+data_path = os.path.join('..','in')
+
+# global Initialization of MTCNN for face detection
+mtcnn = MTCNN(keep_all=True) 
 
 def resize_image(image, scale):
     height, width = image.shape[:2]
@@ -75,16 +84,6 @@ def process_folder(folder_path, scale):
     #sort the dataframe by decades, ascending
     df = df.sort_values(by='Decade', ascending=True)
     return df
-
-# Get the directory where the script is located
-script_directory = os.path.dirname(os.path.realpath(__file__))
-# Change the current working directory to the directory of the script
-os.chdir(script_directory)
-
-data_path = os.path.join('..','in')
-
-# global Initialization of MTCNN for face detection
-mtcnn = MTCNN(keep_all=True) 
 
 def main():
         

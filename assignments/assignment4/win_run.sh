@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Activate the virtual environment
-source ./env/bin/activate
+source env/Scripts/activate
 
 # Run the face_detection.py file
 python src/face_detection.py
@@ -11,3 +11,4 @@ python src/plot.py
 
 # Deactivate the virtual environment
 deactivate
+
