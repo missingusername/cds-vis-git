@@ -80,13 +80,13 @@ def process_folder(folder_path, scale):
         if data['Total Pages'][i] > 0:
             data['% Pages with Faces'][i] = (data['Pages with Faces'][i] / data['Total Pages'][i]) * 100
 
-    df = pd.DataFrame(data)
+    df = pd.DataFrame(data, index=False)
     #sort the dataframe by decades, ascending
     df = df.sort_values(by='Decade', ascending=True)
     return df
 
 def main():
-        
+    
     parser = argparse.ArgumentParser(description='Process images in a folder and compute statistics per decade.')
     parser.add_argument('-s', '--scale', required=False, type=float, default=1, help='Scale factor to resize the images (default: 0.5)')
     

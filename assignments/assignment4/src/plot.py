@@ -53,7 +53,7 @@ def process_csv_files_in_folder(folder_path):
             df = pd.read_csv(csv_path)
             #folder path is where the plot is saved
             plt = line_chart(df, x_axis, y_axis, f'% of Pages per Decade Containing Faces for {newspaper} Newspaper')
-            plt.savefig(os.path.join(folder_path,f'{newspaper} plot3.png'))
+            plt.savefig(os.path.join(folder_path,f'{newspaper} plot.png'))
             plt.close()
 
 def main():
