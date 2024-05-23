@@ -21,7 +21,6 @@ def resize_image(image, scale):
     new_width = int(width * scale)
     new_height = int(height * scale)
     resized_image = cv2.resize(image, (new_width, new_height), interpolation=cv2.INTER_AREA)
-    #pil_image = Image.fromarray(resized_image)
     return resized_image
 
 def detect_faces(image):
@@ -30,11 +29,15 @@ def detect_faces(image):
     return num_faces
 
 def process_image(image_path, scale):
+    #Taking extracting just the filename from the file path, then splitting the filename into a list of strings called parts, by seperating the filename on dashes.
+    #e.g., turning "XYZ-1234-12-34-a-p000x" into ['XYZ','1234','12','34','a','p000x'] 
     parts = os.path.basename(image_path).split('-')
+    #taking the index-1 object in the parts list. e.g, 1234.
     year_str = parts[1]
+    #trying to convert the string representation of a number into an "actual" number (integer)  
     try:
         year = int(year_str)
-        decade = (year // 10) * 10
+        decade = (year // 10) * 10  #calculate the decade by using integer division. e.g. 1999//10=199 then 199*10=1990 
     except ValueError:
         return None, 0
     
@@ -92,20 +95,12 @@ def main():
     
     args = parser.parse_args()
     scale = args.scale
-
-    start_time = time.time()  # Start the timer
     
     for folder in os.listdir(data_path):
         current_folder_path = os.path.join(data_path, folder)
         
-        start_time = time.time()  # Start the timer
-        
         print(f'Processing "{folder}" folder')
         df = process_folder(current_folder_path, scale)
-    
-        end_time = time.time()  # End the timer
-        elapsed_time = end_time - start_time  # Calculate the elapsed time
-        print(f'Time elapsed: {elapsed_time} seconds')
 
         df.to_csv(f'../out/{folder} stats.csv')
 
