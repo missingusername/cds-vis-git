@@ -184,13 +184,15 @@ def plot_history(H, epochs):
 def main():
     # Load or save data
     X, y = load_or_save_data(data_path, saved_data_file)
+    # Split data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
     # Normalize pixel values
-    X = X.astype('float') / 255.0
+    X_train = X_train.astype('float') / 255.0
+    X_test = X_test.astype('float') / 255.0
     # Encode labels
     lb = LabelBinarizer()
-    y = lb.fit_transform(y)
-    # Split data into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    y_train = lb.fit_transform(y_train)
+    y_test = lb.fit_transform(y_test)
     # Build model
     model = build_model()
     # Train model
