@@ -1,7 +1,8 @@
-# CDS Visual Analytics Assignment #3: Simple Image Search Algorithm (+KNN)
+# CDS Visual Analytics Assignment #3: 
 
 ## What is this?
 
+it uses data augmentation to
 
 ## Setup
 1. Make sure to have python and Git Bash installed!
@@ -55,3 +56,22 @@ bash win_run.sh
 ```
 
 ## Takeaways from output
+
+|       Class       | Precision | Recall | F1-Score | Support |
+|:-----------------:|:---------:|:------:|:--------:|:-------:|
+|        ADVE       |    0.92   |  0.79  |   0.85   |    57   |
+|       Email       |    0.85   |  0.84  |   0.84   |   135   |
+|        Form       |    0.42   |  0.65  |   0.51   |    88   |
+|      Letter       |    0.45   |  0.84  |   0.59   |   122   |
+|        Memo       |    0.39   |  0.33  |   0.36   |   109   |
+|        News       |    0.75   |  0.62  |   0.68   |    34   |
+|        Note       |    0.58   |  0.19  |   0.29   |    36   |
+|      Report       |    1.00   |  0.06  |   0.12   |    48   |
+|      Resume       |    0.00   |  0.00  |   0.00   |    15   |
+|  Scientific       |    0.47   |  0.13  |   0.21   |    53   |
+| **Accuracy**      |           |        |   0.56   |   697   |
+| **Macro Avg**     |    0.58   |  0.45  |   0.44   |   697   |
+| **Weighted Avg**  |    0.60   |  0.56  |   0.53   |   697   |
+From the f-1 scores we can see that the model actually does learn to distinguish fairly well between the differnt types of documents. 
+
+![Learning curves](out/learning%20curves.png)

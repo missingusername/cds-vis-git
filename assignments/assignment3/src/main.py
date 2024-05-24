@@ -115,15 +115,19 @@ def train_model(model, X_train, y_train, epochs=10):
     """
     lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
         initial_learning_rate=0.01, decay_steps=10000, decay_rate=0.9)
+    
     sgd = SGD(learning_rate=lr_schedule)
+
     model.compile(optimizer=sgd,
                   loss='categorical_crossentropy',
                   metrics=['accuracy'])
+    
     history = model.fit(X_train, y_train, 
                         validation_split=0.1, 
                         batch_size=128, 
                         epochs=epochs, 
                         verbose=1)
+    
     return model, history
 
 # Function to evaluate the model
@@ -184,12 +188,12 @@ def main():
     # Train model
     epochs = 10
     model, history = train_model(model, X_train, y_train, epochs)
+    # Plot learning curves
+    plot_history(history, epochs)
     # Save model
     model.save(os.path.join(output_path, 'tobacco_vgg16.h5'))
     # Evaluate model
     evaluate_model(model, X_test, y_test, lb)
-    # Plot learning curves
-    plot_history(history, epochs)
 
 if __name__ == '__main__':
     main()
