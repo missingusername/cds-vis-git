@@ -166,7 +166,7 @@ def plot_history(H, epochs):
     plt.ylabel("Accuracy")
     plt.tight_layout()
     plt.legend()
-    plt.show()
+    plt.savefig(os.path.join(output_path,'learning curves.png'))
 
 # Main function
 def main():
