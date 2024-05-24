@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Activate the virtual environment
-source env/Scripts/activate
+source ./env/bin/activate
 
 # Run the logreg.py file
 python src/logreg.py
