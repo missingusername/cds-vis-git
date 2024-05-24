@@ -101,8 +101,9 @@ def build_model():
         layer.trainable = False
     flat1 = Flatten()(base_model.layers[-1].output)
     bn = BatchNormalization()(flat1)
-    class2 = Dense(128, activation='relu')(bn)
-    output = Dense(10, activation='softmax')(class2)
+    class1 = Dense(128, activation='relu')(bn)
+    drop = Dropout(0.1)(class1)
+    output = Dense(10, activation='softmax')(drop)
     model = Model(inputs=base_model.inputs, outputs=output)
     return model
 
