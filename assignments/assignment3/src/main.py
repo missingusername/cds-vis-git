@@ -17,7 +17,7 @@ from tensorflow.keras.preprocessing.image import (load_img,
 # VGG16 model
 from tensorflow.keras.applications.vgg16 import (preprocess_input,
                                                  VGG16)
-from tensorflow.keras.layers import Flatten, Dense, BatchNormalization
+from tensorflow.keras.layers import Flatten, Dense, Dropout, BatchNormalization
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import SGD
 
