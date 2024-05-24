@@ -101,7 +101,7 @@ def build_model():
     return model
 
 # Function to train the model
-def train_model(model, X_train, y_train):
+def train_model(model, X_train, y_train, epochs=10):
     """
     Train the specified model on the training data.
 
@@ -122,7 +122,7 @@ def train_model(model, X_train, y_train):
     history = model.fit(X_train, y_train, 
                         validation_split=0.1, 
                         batch_size=128, 
-                        epochs=10, 
+                        epochs=epochs, 
                         verbose=1)
     return model, history
 
@@ -147,20 +147,25 @@ def evaluate_model(model, X_test, y_test, lb):
         f.write(report)
 
 # Function to plot learning curves
-def plot_learning_curves(history):
-    """
-    Plot the learning curves (accuracy and validation accuracy) during training.
-
-    Args:
-        history (History): Keras History object containing training history.
-    """
-    plt.plot(history.history['accuracy'], label='train_accuracy')
-    plt.plot(history.history['val_accuracy'], label='val_accuracy')
-    plt.title('Model Accuracy')
-    plt.xlabel('Epoch')
-    plt.ylabel('Accuracy')
+def plot_history(H, epochs):
+    plt.figure(figsize=(12,6))
+    plt.subplot(1,2,1)
+    plt.plot(np.arange(0, epochs), H.history["loss"], label="train_loss")
+    plt.plot(np.arange(0, epochs), H.history["val_loss"], label="val_loss", linestyle=":")
+    plt.title("Loss curve")
+    plt.xlabel("Epoch")
+    plt.ylabel("Loss")
+    plt.tight_layout()
     plt.legend()
-    plt.savefig(os.path.join(output_path, 'learning_curves_with_vgg16.png'))
+
+    plt.subplot(1,2,2)
+    plt.plot(np.arange(0, epochs), H.history["accuracy"], label="train_acc")
+    plt.plot(np.arange(0, epochs), H.history["val_accuracy"], label="val_acc", linestyle=":")
+    plt.title("Accuracy curve")
+    plt.xlabel("Epoch")
+    plt.ylabel("Accuracy")
+    plt.tight_layout()
+    plt.legend()
     plt.show()
 
 # Main function
@@ -177,13 +182,14 @@ def main():
     # Build model
     model = build_model()
     # Train model
-    model, history = train_model(model, X_train, y_train)
+    epochs = 10
+    model, history = train_model(model, X_train, y_train, epochs)
     # Save model
     model.save(os.path.join(output_path, 'tobacco_vgg16.h5'))
     # Evaluate model
     evaluate_model(model, X_test, y_test, lb)
     # Plot learning curves
-    plot_learning_curves(history)
+    plot_history(history, epochs)
 
 if __name__ == '__main__':
     main()
