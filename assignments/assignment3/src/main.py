@@ -10,8 +10,12 @@ import tensorflow as tf
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
-from tensorflow.keras.preprocessing.image import load_img, img_to_array
-from tensorflow.keras.applications import VGG16
+# image processsing
+from tensorflow.keras.preprocessing.image import (load_img,
+                                                  img_to_array)
+# VGG16 model
+from tensorflow.keras.applications.vgg16 import (preprocess_input,
+                                                 VGG16)
 from tensorflow.keras.layers import Flatten, Dense, BatchNormalization
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import SGD
@@ -74,8 +78,9 @@ def load_data(data_path):
             if image_file.endswith('.jpg'):
                 image_path = os.path.join(folder_path, image_file)
                 image = load_img(image_path, target_size=(224, 224))  
-                image_array = img_to_array(image)
-                data.append(image_array)
+                image = img_to_array(image)
+                image = preprocess_input(image)
+                data.append(image)
                 labels.append(folder)
 
     return np.array(data), np.array(labels)
@@ -95,9 +100,21 @@ def build_model():
         layer.trainable = False
     flat1 = Flatten()(base_model.layers[-1].output)
     bn = BatchNormalization()(flat1)
-    class2 = Dense(128, activation='relu')(bn)
-    output = Dense(10, activation='softmax')(class2)
+    class1 = Dense(128, activation='relu')(bn)
+    output = Dense(10, activation='softmax')(class1)
     model = Model(inputs=base_model.inputs, outputs=output)
+
+    lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
+    initial_learning_rate=0.01,
+    decay_steps=10000,
+    decay_rate=0.9)
+
+    sgd = SGD(learning_rate=lr_schedule)
+
+    model.compile(optimizer=sgd,
+                  loss='categorical_crossentropy',
+                  metrics=['accuracy'])
+
     return model
 
 # Function to train the model
@@ -113,15 +130,6 @@ def train_model(model, X_train, y_train, epochs=10):
     Returns:
         tuple: Tuple containing the trained model and training history.
     """
-    lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
-        initial_learning_rate=0.01, decay_steps=10000, decay_rate=0.9)
-    
-    sgd = SGD(learning_rate=lr_schedule)
-
-    model.compile(optimizer=sgd,
-                  loss='categorical_crossentropy',
-                  metrics=['accuracy'])
-    
     history = model.fit(X_train, y_train, 
                         validation_split=0.1, 
                         batch_size=128, 

@@ -1,8 +1,7 @@
-# CDS Visual Analytics Assignment #3: 
+# CDS Visual Analytics Assignment #3: Simple Image Search Algorithm (+KNN)
 
 ## What is this?
 
-it uses data augmentation to
 
 ## Setup
 1. Make sure to have python and Git Bash installed!
@@ -72,6 +71,17 @@ bash win_run.sh
 | **Accuracy**      |           |        |   0.56   |   697   |
 | **Macro Avg**     |    0.58   |  0.45  |   0.44   |   697   |
 | **Weighted Avg**  |    0.60   |  0.56  |   0.53   |   697   |
-From the f-1 scores we can see that the model actually does learn to distinguish fairly well between the differnt types of documents. 
+
+As we can see from the classification report, the final model is actually alright at clssifying different document categories, with a WEIGHT AVG. f-1 score of **0.53**. This means that, on average, the model is good at classifying the different types of documents.
+Looking at the specific classes, we can see that it seems especially good at **ADVE** and **Emails**, while seeming less good at **Reports**, and even completely missing **Resumes**.
+
+However, if we look at the final plot of the learning curves, we can see that there is a noticable discrepancy between the lines. In the loss curve, we can see that the val_loss and train_loss seem to start off about similar, but that train_loss drops off significantly faster than the val_loss, with val_loss barely falling at all. This would indicate that the model is somehow overfitting to the training data, and isnt learning how to generalize to unseen data.
 
 ![Learning curves](out/learning%20curves.png)
+Looking at the accuracy curves, we can see that the model quickly becomes good at classifying the training data, while the validation lacks slightly behind, but both still following the same general upwards trend, leading me to believe, that if given more epochs, the curves could converge.
+
+Try as i might, i have not been able to fix these problems of overfitting. i have tried implementing adam, sgd, different learning rates, with and without data augmentation, batchnormalization, dropout layers, different random states, nothing seems to work. So while i realize that the script is somehow overfitting, i cannot find the actual cause no matter what i try.
+
+## Limitations and possible steps to improvement
+
+As mentioned, the model seems to somehow overfit, which is of course a great limitation. The steps to improving the model would be to combat this overfitting.
