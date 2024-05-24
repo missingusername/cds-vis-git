@@ -37,16 +37,16 @@ bash win_setup.sh
 
 | name | flag | description | is required |
 |   -   |   -   |   -   |   -   |
-| target | -t | The number code of the target image. Simply find an image in the `jpg` folder you want to search for. For example, `image_0016.jpg` would just require you to input `16`, as it automatically pads the number with 0's to ensure it is 4 digits long. | *REQUIRED |
+| target | -t | The number code of the target image. Simply find an image in the `jpg` folder you want to search for. For example, `image_0016.jpg` would just require you to input `-t 16`, as it automatically pads the number with 0's to ensure it is 4 digits long. | *REQUIRED |
 | similar | -s | How many similar images to search for (Default = 5) | OPTIONAL |
 
 7. To finally execute the scripts (`simple_search.py` & `knn_search.py`), simply run the OS-appropriate `run.sh` script in the same Git Bash terminal:
 
-(Unix) Find similar images to `image_0016.jpg`
+Unix: Find similar images to `image_0016.jpg`
 ```sh
 bash unix_run.sh -t 16
 ```
-(Windows) Find 10 similar images to `image_0016.jpg`
+Windows: Find 10 similar images to `image_0016.jpg`
 ```sh
 bash win_run.sh -t 16 -s 10
 ```
