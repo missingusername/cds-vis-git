@@ -79,6 +79,13 @@ Windows: Using optional scale flag, to scale images to 50% size.
 bash win_run.sh -s 0.5
 ```
 
+## Takeaways from output
+![Learning curves](out/GDL%20plot.png)
+![Learning curves](out/IMP%20plot.png)
+![Learning curves](out/JDG%20plot.png)
+
+By looking at the plots generated from the different newspapers, we can see that all the papers in general seem to include a larger proportional amount of faces relative to the amount of pages, as the decades increase. The exception being the GDL paper, which seemingly started off with realtively high amount of pages containing faces, which then dropped off, and the nrose again in tandem with the other papers.
+
 ## The Code
 ### Face_detection.py
 The script goes through each folder in the `in` folder, and processes each image inside that folder.

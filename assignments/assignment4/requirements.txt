@@ -1,5 +1,5 @@
 facenet_pytorch==2.6.0
 matplotlib==3.6.2
 opencv-python-headless==4.9.0.80 
-pandas
+pandas==2.2.2
 tqdm==4.66.2
