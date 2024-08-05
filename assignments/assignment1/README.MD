@@ -80,6 +80,12 @@ Here we can see that the simple search doesnt perform particularly well. While w
 
 Here, in comparison to the simple search, we see distances consistently in the 0's. We can also see that the images found are visually much closer to the target image, with many ofthem being the same species of flower. This clearly marks it as the the more reliable image search method, but it also has a consistently longer processing time. This can however be combatted, which we will explore in the following code section.
 
+## Limitations & improvement.
+
+Since these scripts were made specifically with the flower dataset in mind, the scripts only work if the image files follow the same naming convention of the flower daaset, e.g. `image_1023.jpg`. The script could be re-written to take *any* filename as an argument, however i opted to keep the ability to simply pass the numerical code of the target image, as i found it simpler and faster.
+In the KNN script, i dump the feature_list to its own file after processing for the first time, and load it in future runs to save time. I also wanted to try to implement this in the simple search, by dumping the histograms to a file for quicker loading on subsequent runs, but while trying to implement this i would run out of memory when reaching ~750 histograms. This leads to keeping the original method of having to compute the histograms on each run.
+This means that despite the KNN being slower on the initial search, it will eventually be faster if counting subsequent runs.
+
 ## The Code
 ### Simple Image Search
 The script works by simply looping through every `.jpg` file in the `jpg` folder. For each file, we load it as an openCV image, create an RGB histogram for it, and then normalize the histogram afterwards.
@@ -100,9 +106,3 @@ Once the features for all images are extracted, they are saved to a file for fut
 When searching for similar images, the script uses the extracted features and applies the K-Nearest Neighbors (KNN) algorithm. The KNN model is trained on the feature set and then used to find the nearest neighbors to the target image based on cosine distance. The distances and indices of the nearest neighbors are stored in a list of tuples, which is then sorted by distance.
 
 The top `N` similar images (plus the target image) are selected for display. These images are plotted using Matplotlib, showing the target image and its most similar matches in a grid layout. The plot is saved as `similar_knn.png` in the `out` folder. Additionally, the results are saved as a `.CSV` file in the `out` folder, providing a record of the filenames and their distances from the target image. I have chosen not to round the distances for this one, as the KNN performs substantially better than the simple search, and thus could use the extra decimals to distinguish between distances.
-
-### Limitations & improvement.
-
-Since these scripts were made specifically with the flower dataset in mind, the scripts only work if the image files follow the same naming convention of the flower daaset, e.g. `image_1023.jpg`. The script could be re-written to take *any* filename as an argument, however i opted to keep the ability to simply pass the numerical code of the target image, as i found it simpler and faster.
-In the KNN script, i dump the feature_list to its own file after processing for the first time, and load it in future runs to save time. I also wanted to try to implement this in the simple search, by dumping the histograms to a file for quicker loading on subsequent runs, but while trying to implement this i would run out of memory when reaching ~750 histograms. This leads to keeping the original method of having to compute the histograms on each run.
-This means that despite the KNN being slower on the initial search, it will eventually be faster if counting subsequent runs.
