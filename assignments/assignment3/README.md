@@ -43,7 +43,17 @@ assignment3/
 
 5. Before you can run the scripts, make sure you have the required libraries in the `requirements.txt`. This can be done by simply running the OS-appropriate setup script from inside the `assignment3` folder, which will set up a virtual environment and get the required libraries. Again, using Git Bash:
 
-6. To finally execute the script, simply run the OS-appropriate `run.sh` script in the same Git Bash terminal:
+6. The script can also take these optional command line arguments on execution:
+
+| name        | flag | description                                                         | type | default value | Is required? |
+|-------------|------|---------------------------------------------------------------------|------|---------------|--------------|
+| save        | -s   | Save the model in the `/out` folder after training.                                      | bool | False         | OPTIONAL     |
+| optimizer   | -o   | Which optimizer to use for the model.                               | str  | 'adam'        | OPTIONAL     |
+| model       | -m   | Whether to print a summary of the model architecture.               | bool | True          | OPTIONAL     |
+| epochs      | -e   | How many epochs to train the model over.                            | int  | 10            | OPTIONAL     |
+| randomstate | -r   | What random state/"seed" to use when train-test splitting the data. |  int | 42            | OPTIONAL     |
+
+7. To finally execute the script, simply run the OS-appropriate `run.sh` script in the same Git Bash terminal:
 
 Unix: 
 ```sh
@@ -58,30 +68,50 @@ bash win_run.sh
 
 |       Class       | Precision | Recall | F1-Score | Support |
 |:-----------------:|:---------:|:------:|:--------:|:-------:|
-|        ADVE       |    0.92   |  0.79  |   0.85   |    57   |
-|       Email       |    0.85   |  0.84  |   0.84   |   135   |
-|        Form       |    0.42   |  0.65  |   0.51   |    88   |
-|      Letter       |    0.45   |  0.84  |   0.59   |   122   |
-|        Memo       |    0.39   |  0.33  |   0.36   |   109   |
-|        News       |    0.75   |  0.62  |   0.68   |    34   |
-|        Note       |    0.58   |  0.19  |   0.29   |    36   |
-|      Report       |    1.00   |  0.06  |   0.12   |    48   |
-|      Resume       |    0.00   |  0.00  |   0.00   |    15   |
-|  Scientific       |    0.47   |  0.13  |   0.21   |    53   |
-| **Accuracy**      |           |        |   0.56   |   697   |
-| **Macro Avg**     |    0.58   |  0.45  |   0.44   |   697   |
-| **Weighted Avg**  |    0.60   |  0.56  |   0.53   |   697   |
+|        ADVE       |    0.96   |  0.84  |   0.90   |    57   |
+|       Email       |    1.00   |  0.85  |   0.92   |   135   |
+|        Form       |    0.73   |  0.67  |   0.70   |    88   |
+|      Letter       |    0.73   |  0.69  |   0.71   |   122   |
+|        Memo       |    0.51   |  0.83  |   0.63   |   109   |
+|        News       |    0.75   |  0.97  |   0.85   |    34   |
+|        Note       |    0.92   |  0.67  |   0.77   |    36   |
+|      Report       |    0.59   |  0.56  |   0.57   |    48   |
+|      Resume       |    0.62   |  0.53  |   0.57   |    15   |
+|  Scientific       |    0.64   |  0.34  |   0.44   |    53   |
+| **Accuracy**      |           |        |   0.73   |   697   |
+| **Macro Avg**     |    0.74   |  0.70  |   0.71   |   697   |
+| **Weighted Avg**  |    0.76   |  0.73  |   0.73   |   697   |
 
-As we can see from the classification report, the final model is actually alright at clssifying different document categories, with a WEIGHT AVG. f-1 score of **0.53**. This means that, on average, the model is good at classifying the different types of documents.
-Looking at the specific classes, we can see that it seems especially good at **ADVE** and **Emails**, while seeming less good at **Reports**, and even completely missing **Resumes**.
+As we can see from the classification report, the final model appears decent at classifying different document categories, with a weighted average F1 score of **0.73**. This means that, on average, the model is good at classifying the different types of documents.
+Looking at the specific classes, we can see that it seems especially good atclassifying **ADVE** and **Emails**, while seemingly less good at **Scientific**.
 
-However, if we look at the final plot of the learning curves, we can see that there is a noticable discrepancy between the lines. In the loss curve, we can see that the val_loss and train_loss seem to start off about similar, but that train_loss drops off significantly faster than the val_loss, with val_loss barely falling at all. This would indicate that the model is somehow overfitting to the training data, and isnt learning how to generalize to unseen data.
+Looking at the loss curves of the models training process however, we can gain a better insight into how the model arrived at this performance, and whether or not there appears to be more "power" left to train out of it.
 
 ![Learning curves](out/learning%20curves.png)
-Looking at the accuracy curves, we can see that the model quickly becomes good at classifying the training data, while the validation lacks slightly behind, but both still following the same general upwards trend, leading me to believe, that if given more epochs, the curves could converge.
 
-Try as i might, i have not been able to fix these problems of overfitting. i have tried implementing adam, sgd, different learning rates, with and without data augmentation, batchnormalization, dropout layers, different random states, nothing seems to work. So while i realize that the script is somehow overfitting, i cannot find the actual cause no matter what i try.
+### Loss curve
+In the first plot, we see the loss curve. The loss curve represents the error associated with the model's predictions, ie. the loss function measures how well the model's predictions match the actual labels. Here, *lower* values indicate better performance, as there is less error associated with the predictions.
+
+Looking at the training and validation curves, we see that both start out seemingly close to each other, and track each other fairly well over the training period. Here, we see a steep initial drop-off for both lines, progressively tapering off over the epochs.
+
+A decrease in training loss indicates that the model is learning and fitting the training data better as training progresses.
+
+A decrease in validation loss means that the model is also getting better at predicting the labels of data it has not encountered before.
+
+With both curves following each other, it means that as the model is getting better at predicting on the training data, it is also getting better at predicting on new data.
+
+### Accuracy curve
+In the second plot, se see the accuracy curve. Accuracy represents the proportion of correct predictions out of the total predictions. So unlike loss, *higher* accuracy indicates better model performance, since a larger proportion of the predictions are correct.
+
+Again the training and validation lines match start out close and follow each other fairly closely during training. Here, we see a steep initial increase in accuracy, again gradually tapering off as the training goes on over the epochs. This is to be expected, and reflects the decreasing loss curve.
+
+The increase in training accuracy means that the model is getting better at predicting the labels of the training data. This is to be expected, since the model learns over time what the actual labels are for the data.
+
+The increase in validation accuracy is important, since it refelects how well the model can generalize what its learned to new data, which it hasnt seen before.
+
+Therefore, it is a good sign that the validation accuracy follows closely along with the training accuracy, since that means that the model generalizes well to new data.
 
 ## Limitations and possible steps to improvement
+As in assignment 2, there is still the problem of finding a "perfect" model architecture, and even took a decent amount of time to arrive at this one. However, as mentioned in the improvements for A2, one could again have used a grid search to find better hyperparameters for the model.
 
-As mentioned, the model seems to somehow overfit, which is of course a great limitation. The steps to improving the model would be to combat this overfitting.
+Something else one could improve was changing the data augmentation parameters. I tried fiddling around with a few different things, such as zooming in & out, and shifting the image vertically and horizontally, however those appeared to *decrease* the final F1 score (*albeit very slightly*), so i opted to not use them. As with the model architecture, this is something that takes a great amount of time to fine tune, since you have to run the training process again each time, but unlike model architecture, there does not appear to be a grid-search like method of finding optimal data augmentation.
