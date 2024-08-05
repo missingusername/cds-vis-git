@@ -84,7 +84,7 @@ bash win_run.sh -s 0.5
 ![Learning curves](out/IMP%20plot.png)
 ![Learning curves](out/JDG%20plot.png)
 
-By looking at the plots generated from the different newspapers, we can see that all the papers in general seem to include a larger proportional amount of faces relative to the amount of pages, as the decades increase. The exception being the GDL paper, which seemingly started off with realtively high amount of pages containing faces, which then dropped off, and the nrose again in tandem with the other papers.
+By looking at the plots generated from the different newspapers, we can see that all the papers in general seem to include a larger proportional amount of faces relative to the amount of pages, as the decades increase. The exception being the GDL paper, which seemingly started off with realtively high amount of pages containing faces, which then dropped off, and then rose again in tandem with the other papers.
 
 ## The Code
 ### Face_detection.py
