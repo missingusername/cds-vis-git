@@ -1,4 +1,4 @@
-# CDS Visual Analytics Assignment #2: Cifar10 Classification Benchmarks
+# Assignment #2: Cifar10 Classification Benchmarks
 
 ## What is it?
 This assignment aims to benchmark 2 ways of doing image clasification on the Cifar10 dataset. The repository features an MLP (Multi-Layer Perceptron) classification script, as well as a logistic regression classifier script. Both scripts generate text reports in the `/out` folder, along with a loss curve for the MLP classifier.

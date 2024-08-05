@@ -1,4 +1,4 @@
-# CDS Visual Analytics Assignment #3: CNN Transfer Learning With VGG16
+# Assignment #3: CNN Transfer Learning With VGG16
 
 ## What is this?
 This assignment features a script that uses transfer learning to train a VGG16 CNN (Convolutional Neural Network) to classify images of different document types, using the `Tobacco3482` dataset. The script also uses data augmentation to augment validation data "on the fly". This results in a classification report and a plot of the the loss & accuracy curves from the training process.

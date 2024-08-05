@@ -1,4 +1,4 @@
-# CDS Visual Analytics Assignment #4: Newspaper Face Detection Across Decades 
+# Assignment #4: Newspaper Face Detection Across Decades 
 
 ## What is it?
 This assignment features 2 scripts, whose purpose is to process folders of images, scan them for faces, group them by decade, and produce a statistics `.csv` and a plot for each folder of images.

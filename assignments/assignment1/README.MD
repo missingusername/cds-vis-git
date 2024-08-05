@@ -1,4 +1,4 @@
-# CDS Visual Analytics Assignment #1: Simple Image Search Algorithm (+KNN)
+# Assignment #1: Simple Image Search Algorithm (+KNN)
 
 ## What is this?
 This assignment features a script that can perform a "crude"/simple image search, based on comparing color histograms with each other, and finding the ones with the least difference between the target image.
