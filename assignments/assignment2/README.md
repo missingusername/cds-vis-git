@@ -81,10 +81,14 @@ bash win_run.sh
 
 </td></tr> </table>
 
-We can see that both models dont seem to perform particularly well, especially on animals, which consistently score lower than objects like ships, trucks and airplanes. The MLP calssifier does seem to perform substantially better on some animals though, noticably improving performance on horses, frogs, dogs and birds.
+We can see that both models dont seem to perform particularly well, especially on animals, which consistently score lower than objects like ships, trucks and airplanes. The MLP classifier does seem to perform substantially better on some animals though, noticably improving performance on horses, frogs, dogs and birds.
 
 As we can see from the weighted avg. f1-scores of the classifiers, where despite both models not performing particularly well, the MLP classifier still performs noticably better. Despite both models being trained fairly quickly, the MLP classifier trains slightly slower (Using "early_stopping" can cut the processing short if no progress is made over multiple iterations).
 
 ![MLP loss curve](out/mlp_loss_curve.png)
 
 Looking at the loss curve, we can see the loss curve initially dropping off steeply, tapering out when we increase the amount of iterations. This is expected, as the model starts with random weights and makes poor predictions. Over the iterations, the loss decreases as the model adjusts its weights to improve predictions and minimize errors. The curve stabilizes, indicating that further training may not significantly reduce the loss. This also shows the relevance of utilizing "early_stopping" during training, to avoid unnecessary training.
+
+## Possible limitations and improvements/changes
+I have not fine-tuned the parameters of my MLP classifier, which means there is possibly a lot more "power" to be squeezed out from it. This is visible from the loss curve, where, depsite the curve visibly tapering off, it is still dropping off at a relatively substantial rate, meaning that letting the model train for even longer would provide an even better benchmark, at the expense of processing timer and power.
+To really optimize the model, one could also run a grid search to find the best (or at least *better*) combination of parameters to train the model on.
