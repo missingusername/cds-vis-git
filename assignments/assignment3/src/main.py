@@ -5,6 +5,7 @@ import argparse
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
+#disabling warning
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 
 import tensorflow as tf
@@ -12,12 +13,10 @@ from sklearn.preprocessing import LabelBinarizer
 from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
 # image processsing
-from tensorflow.keras.preprocessing.image import (load_img,
-                                                  img_to_array)
+from tensorflow.keras.preprocessing.image import load_img, img_to_array, ImageDataGenerator
 # VGG16 model
-from tensorflow.keras.applications.vgg16 import (preprocess_input,
-                                                 VGG16)
-from tensorflow.keras.layers import Flatten, Dense, BatchNormalization
+from tensorflow.keras.applications.vgg16 import preprocess_input, VGG16
+from tensorflow.keras.layers import Flatten, Dense, BatchNormalization, Dropout
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import SGD, Adam
 
@@ -143,7 +142,7 @@ def evaluate_model(model, X_test, y_test, lb):
                                     predictions.argmax(axis=1), 
                                     target_names=lb.classes_)
     print(report)
-    with open(os.path.join(output_path, 'classification_report_with_vgg16 2.txt'), 'w') as f:
+    with open(os.path.join(output_path, 'classification_report_with_vgg16.txt'), 'w') as f:
         f.write(report)
 
 def plot_history(H, epochs):
@@ -165,7 +164,7 @@ def plot_history(H, epochs):
     plt.ylabel("Accuracy")
     plt.tight_layout()
     plt.legend()
-    plt.savefig(os.path.join(output_path,'learning curves 2.png'))
+    plt.savefig(os.path.join(output_path,'learning curves.png'))
 
 # Main function
 def main():
