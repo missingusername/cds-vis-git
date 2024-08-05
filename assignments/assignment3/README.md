@@ -1,7 +1,7 @@
 # CDS Visual Analytics Assignment #3: Simple Image Search Algorithm (+KNN)
 
 ## What is this?
-
+This assignment features a script that uses transfer learning to train a VGG16 model to classify images of different document types, using the `Tobacco3482` dataset. The script also uses data augmentation to augment validation data "on the fly". This results in a classification report and a plot of the the loss & accuracy curves from the training process.
 
 ## Setup
 1. Make sure to have python and Git Bash installed!
@@ -42,6 +42,15 @@ assignment3/
 ```
 
 5. Before you can run the scripts, make sure you have the required libraries in the `requirements.txt`. This can be done by simply running the OS-appropriate setup script from inside the `assignment3` folder, which will set up a virtual environment and get the required libraries. Again, using Git Bash:
+
+For Unix:
+```sh
+bash unix_setup.sh
+```
+For Windows:
+```sh
+bash win_setup.sh
+```
 
 6. The script can also take these optional command line arguments on execution:
 
