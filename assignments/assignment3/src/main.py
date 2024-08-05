@@ -39,7 +39,7 @@ parser.add_argument('-s', '--save', required=False, type=bool, default=False, he
 parser.add_argument('-o', '--optimizer', required=False, type=str.lower, default='adam', help='*OPTIONAL: Which optimizer to use (Only takes SGD or Adam). Default = Adam')
 parser.add_argument('-m', '--model', required=False, type=bool, default=True, help='*OPTIONAL: Get a summary of the model. Default = True')
 parser.add_argument('-e', '--epochs', required=False, type=int, default=10, help='*OPTIONAL: How many epochs to train the model over. Default = 10.')
-parser.add_argument('-r', '--randomstate', required=False, type=int, default=42, help='*OPTIONAL: What random state/"seed" to use during training. Default = 42.')
+parser.add_argument('-r', '--randomstate', required=False, type=int, default=42, help='*OPTIONAL: What random state/"seed" to use when train-test splitting the data. Default = 42.')
 
 args = parser.parse_args()
 
@@ -78,21 +78,21 @@ def generate_data(data_path):
     return np.array(data), np.array(labels)
 
 def build_model():
-    # Loads the model without the classification layers
+    # load vgg16 model without classifier layers
     base_model = VGG16(include_top=False, pooling='avg', input_shape=(224, 224, 3))
 
-    # Marks the loaded layers as not trainable
+    # mark loaded layers as not trainable
     for layer in base_model.layers:
         layer.trainable = False
 
-    # Adds new classification layers to the base model
+    # add new classifier layers
     flat1 = Flatten()(base_model.layers[-1].output)
     bn = BatchNormalization()(flat1)
     class1 = Dense(128, activation='relu')(bn)
     drop = Dropout(0.1)(class1)
     output = Dense(10, activation='softmax')(drop)
 
-    # creating the new model using the models input and output layers 
+    # define new model
     new_model = Model(inputs=base_model.inputs, outputs=output)
 
     # Initializes the learning_rate_schedule 
@@ -107,33 +107,34 @@ def build_model():
         # Initializes the adam optimizer 
         model_optimizer = SGD(learning_rate=lr_schedule)
 
-    # Compiles the final model 
+    # compile new model 
     new_model.compile(optimizer=model_optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
 
+    # optionally print a summary of the new models architecture
     if args.model:
         new_model.summary()
 
     return new_model
 
 def setup_datagenerator():
-    datagen = ImageDataGenerator(horizontal_flip=True, 
-                                rotation_range=20,
-                                fill_mode='nearest',
-                                brightness_range=[0.9,1.1],
-                                validation_split=0.1)
+    datagen = ImageDataGenerator(horizontal_flip=True, #horizontally flip images
+                                rotation_range=20,  #rotate images up to 20 degrees
+                                fill_mode='nearest', #fill empty space with the nearest border color of the image
+                                brightness_range=[0.9,1.1], #change image brightness between 90%-110%
+                                validation_split=0.1) #using 10% of the data as a validation split, meaning we test the model against the augmented images
     return datagen
 
 def train_model(model, X_train, y_train, datagen):   
 
     # Fits the model on the training and validation data using "datagen" for data augmentation
-    H = model.fit(datagen.flow(X_train, y_train, batch_size=128), 
+    history = model.fit(datagen.flow(X_train, y_train, batch_size=128), 
                                 validation_data = datagen.flow(X_train, y_train, 
                                                                 batch_size=128, 
                                                                 subset = "validation"),
                                                                 epochs=args.epochs,
                                                                 verbose=1) 
 
-    return H
+    return model, history
 
 # Function to evaluate the model
 def evaluate_model(model, X_test, y_test, lb):
@@ -142,7 +143,7 @@ def evaluate_model(model, X_test, y_test, lb):
                                     predictions.argmax(axis=1), 
                                     target_names=lb.classes_)
     print(report)
-    with open(os.path.join(output_path, 'classification_report_with_vgg16 12.txt'), 'w') as f:
+    with open(os.path.join(output_path, 'classification_report_with_vgg16 2.txt'), 'w') as f:
         f.write(report)
 
 def plot_history(H, epochs):
@@ -164,29 +165,29 @@ def plot_history(H, epochs):
     plt.ylabel("Accuracy")
     plt.tight_layout()
     plt.legend()
-    plt.savefig(os.path.join(output_path,'learning curves 12.png'))
+    plt.savefig(os.path.join(output_path,'learning curves 2.png'))
 
 # Main function
 def main():
-    # Load or save data
+    # Load data & labels, or create a new .pkl data file of the chosen input data  
     data, labels = load_or_create_data(data_path, saved_data_file)
-    # Encode labels
+    # Encoding labels before train-test splitting
     lb = LabelBinarizer()
     labels = lb.fit_transform(labels)
     # Split data into training and testing sets
     X_train, X_test, y_train, y_test = train_test_split(data, labels, test_size=0.2, random_state=args.randomstate)
     # Build model
     model = build_model()
-
-    # Generates data using data augmentation
+    # setting up a data augmentation
     datagen = setup_datagenerator()
-
-    history = train_model(model, X_train, y_train, datagen)
+    #training the model and getting the training history
+    model, history = train_model(model, X_train, y_train, datagen)
     # Plot learning curves
     plot_history(history, args.epochs)
     # Evaluate model
     evaluate_model(model, X_test, y_test, lb)
 
+    #optionally save the model
     if args.save:
         model.save(os.path.join(output_path, 'tobacco_vgg16.h5'))
 
