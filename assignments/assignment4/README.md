@@ -1,7 +1,7 @@
 # Assignment #4: Newspaper Face Detection Across Decades 
 
 ## What is it?
-This assignment features 2 scripts, whose purpose is to process folders of images, scan them for faces, group them by decade, and produce a statistics `.csv` and a plot for each folder of images.
+This assignment features 2 scripts, whose purpose is to process folders of newspaper scans, scan them for faces, group them by decade, and produce a statistics `.csv` and a plot for each folder of images.
 It features the main `face_detection.py` script, which processes each folder in the `/in` folder and scans each image inside for faces, generating statistics by decade, and saving them as `.csv` files.
 This is followed by the `plot.py` script, which then generates line charts based on the generated `.csv` files.
 
@@ -85,6 +85,11 @@ bash win_run.sh -s 0.5
 ![Learning curves](out/JDG%20plot.png)
 
 By looking at the plots generated from the different newspapers, we can see that all the papers in general seem to include a larger proportional amount of faces relative to the amount of pages, as the decades increase. The exception being the GDL paper, which seemingly started off with realtively high amount of pages containing faces, which then dropped off, and then rose again in tandem with the other papers.
+
+## Limitations & improvement.
+The biggest "limitation" of the script is that it doesnt catch *all* faces. There are some possible ways to combat this, for example, one could potentially find or even train a better face detection model, optimized for black and white image scans. This seems a bit infeasible, as the MTCNN model is already an extensively finetune model made for face detection.
+As a result, the more feasible option would be to improve the data itself. As mentioned, these are image scans, and as is customary for a lot of image scans, they are quite grainy/noisy. While the quality of the scans can vary, some of the faces can be hard to detect even as a human, due to the loss of details from the high contrast and noisiness. Therefore, preprocessing the images could potentially improve performance, for example by de-noising the image or trying to adjust the contrast & brightness.
+Another big limitation of the face detection script is the overall processing time, taking up to multiple hours even on a powerful cloud computer. As a result, i added the optional "scale" argument, but as mentioned that can impact performance and cause it to miss further faces.
 
 ## The Code
 ### Face_detection.py
